@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { setIsRoomHost } from '../../store/actions';
+import JoinRoomContent from './JoinRoomContent';
 import './JoinRoomPage.css';
 import JoinRoomTItle from './JoinRoomTItle';
 
@@ -11,15 +12,15 @@ function JoinRoomPage({ setIsRoomHostAction, isRoomHost }) {
   useEffect(() => {
     const isHost = new URLSearchParams(search).get('host');
 
-    if (isHost) {
-      setIsRoomHostAction(true);
-    }
+    setIsRoomHostAction(Boolean(isHost));
   }, [search, setIsRoomHostAction]);
 
   return (
     <div className="join_room_page_container">
       <div className="join_room_page_panel">
         <JoinRoomTItle isRoomHost={isRoomHost} />
+
+        <JoinRoomContent />
       </div>
     </div>
   );
