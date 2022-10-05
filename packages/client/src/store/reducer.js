@@ -1,5 +1,8 @@
+import Actions from './actions';
+
 const initState = {
   identity: '',
+  isRoomHost: false,
 };
 
 const reducer = (state = initState, action) => {
@@ -8,6 +11,11 @@ const reducer = (state = initState, action) => {
       return {
         ...state,
         identity: action.payload,
+      };
+    case Actions.SET_IS_ROOM_HOST:
+      return {
+        ...state,
+        isRoomHost: action.payload,
       };
     default:
       return state;
