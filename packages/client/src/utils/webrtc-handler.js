@@ -9,11 +9,11 @@ const defaultContraints = {
 
 let localStream;
 
-export const getLocalPreviewAndInitRoomConnection = async (
+export const getLocalPreviewAndInitRoomConnection = async ({
   isRoomHost,
   roomId = null,
-  identity
-) => {
+  identity,
+}) => {
   navigator.mediaDevices
     .getUserMedia(defaultContraints)
     .then((stream) => {

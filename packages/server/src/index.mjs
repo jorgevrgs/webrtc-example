@@ -62,6 +62,9 @@ io.on('connection', (socket) => {
     console.log('Rooms', rooms);
 
     socket.emit('room-created', { roomId });
+    socket.emit('room-updated', {
+      connectedUsers: newRoom.connectedUsers,
+    });
   });
 
   socket.on('join-room', (data) => {
