@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ChatSection from './chat/ChatSection';
 import ParticipantsSection from './participants/ParticipantsSection';
 import RoomLabel from './RoomLabel';
 import VideoSection from './videos/VideoSection';
 
 import { connect } from 'react-redux';
+import { getLocalPreviewAndInitRoomConnection } from '../../utils/webrtc-handler';
+import Overlay from './Overlay';
 import './RoomPage.css';
 
-function RoomPage({ roomId }) {
+function RoomPage({ roomId, identity, isRoomHost, showOverlay }) {
+  useEffect(() => {
+    getLocalPreviewAndInitRoomConnection({ roomId, identity, isRoomHost });
+  }, []);
+
   return (
     <div className="room_container">
       <ParticipantsSection />
@@ -17,6 +23,8 @@ function RoomPage({ roomId }) {
       <ChatSection />
 
       <RoomLabel roomId={roomId} />
+
+      {showOverlay && <Overlay />}
     </div>
   );
 }

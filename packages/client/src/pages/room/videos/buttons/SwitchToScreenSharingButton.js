@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SwitchIcon from '../../../../assets/icons/switchToScreenSharing.svg';
 
 export default function SwitchToScreenSharingButton() {
-  const [isScreenSharing, setIsScreenSharing] = React.useState(false);
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
 
   const handleClick = () => {
     setIsScreenSharing(!isScreenSharing);
