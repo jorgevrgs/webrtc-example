@@ -33,6 +33,10 @@ const io = new Server(server, {
   },
 });
 
+io.on('connection', (socket) => {
+  console.log('User connected', socket.id);
+});
+
 // const accountSid = process.env.TWILIO_ACCOUNT_SID;
 // const authToken = process.env.TWILIO_AUTH_TOKEN;
 // const client = twilio(accountSid, authToken);
