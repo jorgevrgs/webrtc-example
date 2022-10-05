@@ -28,7 +28,7 @@ export default function JoinRoomInputs({
 
   return (
     <div className="join_room_inputs_container">
-      {isRoomHost && (
+      {!isRoomHost && (
         <Input
           placeholder="Enter meeting ID"
           value={roomIdValue}

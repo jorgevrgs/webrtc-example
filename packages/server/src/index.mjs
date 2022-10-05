@@ -9,6 +9,21 @@ const PORT = process.env.PORT || 1337;
 const app = express();
 app.use(cors());
 
+const MAX_CONNECTIONS = 4;
+
+let connectedUsers = [];
+let rooms = [];
+
+app.get('/api/room-exists/:roomId', (req, res) => {
+  const { roomId } = req.params;
+  const roomExists = rooms.find((room) => room.id === roomId);
+
+  res.send({
+    roomExists,
+    isFull: roomExists ? roomExists.users.length >= MAX_CONNECTIONS : undefined,
+  });
+});
+
 const server = createServer(app);
 
 const io = new Server(server, {
