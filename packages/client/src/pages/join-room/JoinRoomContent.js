@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { setConnectOnlyWithAudio } from '../../store/actions';
+import ErrorMessage from './ErrorMessage';
 import JoinRoomInputs from './JoinRoomInputs';
 import OnlyWithAudioCheckbox from './OnlyWithAudioCheckbox';
 
@@ -11,6 +12,7 @@ function JoinRoomContent({
 }) {
   const [roomIdValue, setRoomIdValue] = useState('');
   const [userNameValue, setUserNameValue] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   return (
     <>
@@ -26,6 +28,8 @@ function JoinRoomContent({
         value={connectOnlyWithAudio}
         onChange={setConnectOnlyWithAudioAction}
       />
+
+      <ErrorMessage errorMessage={errorMessage} />
     </>
   );
 }
