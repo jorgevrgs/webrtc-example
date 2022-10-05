@@ -1,5 +1,6 @@
 import store from '../store';
 import { setShowOverlay } from '../store/actions';
+import { createNewRoom, joinRoom } from './wss';
 
 const defaultContraints = {
   audio: true,
@@ -22,11 +23,11 @@ export const getLocalPreviewAndInitRoomConnection = async (
       // dispatch action to hide overlay
       store.dispatch(setShowOverlay(false));
 
-      // if (isRoomHost) {
-      //   wss.createNewRoom(identity)
-      // } else {
-      //   wss.joinRoom(roomId, identity)
-      // }
+      if (isRoomHost) {
+        createNewRoom(identity);
+      } else {
+        joinRoom(identity, roomId);
+      }
     })
     .catch(console.error);
 };
