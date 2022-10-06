@@ -32,7 +32,7 @@ export const createNewRoom = (identity) => {
   socket.emit('create-new-room', data);
 };
 
-export const joinRoom = (roomId, identity) => {
+export const joinRoom = (identity, roomId) => {
   const data = {
     roomId,
     identity,
