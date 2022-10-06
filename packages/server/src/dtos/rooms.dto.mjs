@@ -57,6 +57,12 @@ export class RoomsDto {
     };
   }
 
+  removeUserFromRoom(roomId, socketId) {
+    this.rooms.get(roomId).removeUserBySocketId(socketId);
+
+    return this;
+  }
+
   /**
    *
    * @param {string} id room id

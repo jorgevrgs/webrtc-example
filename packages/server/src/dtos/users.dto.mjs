@@ -7,22 +7,42 @@ export class UsersDto {
     Object.assign(this, data);
   }
 
-  getUserById(id) {
-    return this.users.get(id);
+  /**
+   *
+   * @param {string} socketId Socket id
+   * @returns {UserDto}
+   */
+  getUserBySocketId(socketId) {
+    return this.users.get(socketId);
   }
 
-  userExists(id) {
-    return this.users.has(id);
+  /**
+   *
+   * @param {string} socketId Socket id
+   * @returns {boolean}
+   */
+  userExists(socketId) {
+    return this.users.has(socketId);
   }
 
+  /**
+   *
+   * @param {UserDto} user
+   * @returns {UsersDto}
+   */
   addUser(user) {
-    this.users.set(user.id, new UserDto(user));
+    this.users.set(user.socketId, new UserDto(user));
 
     return this;
   }
 
-  removeUser(id) {
-    this.users.delete(id);
+  /**
+   *
+   * @param {string} socketId Socket id
+   * @returns {UserDto}
+   */
+  removeUserBySocketId(socketId) {
+    this.users.delete(socketId);
 
     return this;
   }

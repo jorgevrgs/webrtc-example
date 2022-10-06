@@ -12,12 +12,20 @@ export class RoomDto {
    * @returns
    */
   addUser(user) {
-    this.#_connectedUsers.set(user.id, user);
+    if (!this.#_connectedUsers.has(user.socketId)) {
+      this.#_connectedUsers.set(user.socketId, user);
+    }
 
     return this;
   }
 
   get connectedUsers() {
     return Array.from(this.#_connectedUsers.values());
+  }
+
+  removeUserBySocketId(socketId) {
+    this.#_connectedUsers.delete(socketId);
+
+    return this;
   }
 }

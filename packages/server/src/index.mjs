@@ -42,9 +42,13 @@ io.on('connection', (socket) => {
   console.log('User connected', socket.id);
 
   socket.on('create-new-room', ({ identity }) => {
+    console.log('create-new-room', identity);
+
     const { user, room } = rooms.createRoom(socket.id, identity);
 
     socket.join(room.id);
+
+    connectedUsers.addUser(user);
 
     console.log('New room created', room.id);
     console.log('Rooms', JSON.stringify(room, null, 2));
@@ -56,9 +60,13 @@ io.on('connection', (socket) => {
   });
 
   socket.on('join-room', ({ roomId, identity }) => {
+    console.log('join-room', roomId, identity);
+
     const user = rooms.joinRoom(roomId, identity, socket.id);
 
     socket.join(roomId);
+
+    connectedUsers.addUser(user);
 
     console.log('User joined room', { roomId, user });
 
@@ -67,6 +75,35 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('room-updated', {
       connectedUsers: users,
     });
+  });
+
+  socket.on('disconnect', () => {
+    console.log('disconnect', socket.id);
+
+    const user = connectedUsers.getUserBySocketId(socket.id);
+
+    if (user) {
+      console.log('Disconnecting user', user);
+
+      const roomId = user.roomId;
+
+      connectedUsers.removeUserBySocketId(user.socketId);
+      rooms.removeUserFromRoom(roomId, user.socketId);
+
+      socket.leave(roomId);
+
+      const users = rooms.getRoomUsers(roomId);
+
+      console.log('Update users', users);
+
+      if (users.length > 0) {
+        io.to(roomId).emit('room-updated', {
+          connectedUsers: users,
+        });
+      } else {
+        rooms.removeRoom(roomId);
+      }
+    }
   });
 });
 
