@@ -1,5 +1,8 @@
 export class RoomDto {
+  /** @type {string} */
   id = '';
+
+  /** @type {Map<string, UserDto>} */
   #_connectedUsers = new Map();
 
   constructor(data) {

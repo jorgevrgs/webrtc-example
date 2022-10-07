@@ -1,6 +1,7 @@
 import { UserDto } from './user.dto.mjs';
 
 export class UsersDto {
+  /** @type {Map<string, UserDto>} */
   users = new Map();
 
   constructor(data) {

@@ -3,6 +3,7 @@ import { RoomDto } from './room.dto.mjs';
 import { UserDto } from './user.dto.mjs';
 
 export class RoomsDto {
+  /** @type {Map<string, RoomDto>} */
   rooms = new Map();
 
   constructor(data) {
@@ -77,7 +78,7 @@ export class RoomsDto {
   /**
    *
    * @param {string} id room id
-   * @returns {Map<string, UserDto[]>}
+   * @returns {UserDto[]}
    */
   getRoomUsers(id) {
     return this.rooms.get(id).connectedUsers;
