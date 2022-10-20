@@ -29,10 +29,16 @@ export const connectWithSocketIOServer = () => {
 
   socket.on('conn-prepare', ({ socketId }) => {
     prepareNewPeerConnection(socketId, false);
+
+    socket.emit('conn-init', { socketId });
   });
 
   socket.on('conn-signal', ({ signal, socketId }) => {
     handleSignalingData({ signal, socketId });
+  });
+
+  socket.on('conn-init', ({ socketId }) => {
+    prepareNewPeerConnection(socketId, true);
   });
 };
 

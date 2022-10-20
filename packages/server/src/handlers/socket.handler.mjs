@@ -86,6 +86,12 @@ const onDisconnect = ({ socket, connectedUsers, io, rooms }) => {
   }
 };
 
+const onInitializeConnection = ({ socketId }, { socket, io }) => {
+  const data = { socketId: socket.id };
+
+  io.to(socketId).emit('conn-init', data);
+};
+
 export const onConnectionHandler = ({ socket, rooms, connectedUsers, io }) => {
   console.log('User connected', socket.id);
 
@@ -103,5 +109,9 @@ export const onConnectionHandler = ({ socket, rooms, connectedUsers, io }) => {
 
   socket.on('conn-prepare', ({ signal, socketId }) =>
     onConnPrepare({ signal, socketId }, { socket, io })
+  );
+
+  socket.on('conn-init', ({ socketId }) =>
+    onInitializeConnection({ socketId }, { socket, io })
   );
 };
