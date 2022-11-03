@@ -1,5 +1,7 @@
 // @ts-check
 
+import { UserDto } from '../dtos/user.dto.mjs';
+
 const onCreateRoom = ({ identity }, { rooms, socket, connectedUsers }) => {
   console.log('create-new-room', identity);
 
@@ -32,6 +34,7 @@ const onJoinRoom = (
 
   console.log('User joined room', { roomId, user });
 
+  /** @type { UserDto[] } */
   const users = rooms.getRoomUsers(roomId);
 
   // Prepare peer connection
@@ -48,7 +51,7 @@ const onJoinRoom = (
   });
 };
 
-const onConnPrepare = ({ socketId, signal }, { socket, io }) => {
+const onConnSignal = ({ socketId, signal }, { socket, io }) => {
   const signalingData = {
     signal,
     socketId: socket.id,
@@ -74,7 +77,7 @@ const onDisconnect = ({ socket, connectedUsers, io, rooms }) => {
 
     const users = rooms.getRoomUsers(roomId);
 
-    console.log('Update users', users);
+    console.log('Updated users', JSON.stringify(users, null, 2));
 
     if (users.length > 0) {
       io.to(roomId).emit('room-updated', {
@@ -87,31 +90,20 @@ const onDisconnect = ({ socket, connectedUsers, io, rooms }) => {
 };
 
 const onInitializeConnection = ({ socketId }, { socket, io }) => {
-  const data = { socketId: socket.id };
+  const initData = { socketId: socket.id };
 
-  io.to(socketId).emit('conn-init', data);
+  io.to(socketId).emit('conn-init', initData);
 };
 
-export const onConnectionHandler = ({ socket, rooms, connectedUsers, io }) => {
+export const onConnectionHandler = (context) => {
+  const { socket } = context;
+
   console.log('User connected', socket.id);
 
-  socket.on('create-new-room', ({ identity }) =>
-    onCreateRoom({ identity }, { rooms, socket, connectedUsers })
-  );
-
-  socket.on('join-room', ({ roomId, identity }) =>
-    onJoinRoom({ roomId, identity }, { rooms, socket, connectedUsers, io })
-  );
-
-  socket.on('disconnect', () =>
-    onDisconnect({ socket, rooms, connectedUsers, io })
-  );
-
-  socket.on('conn-prepare', ({ signal, socketId }) =>
-    onConnPrepare({ signal, socketId }, { socket, io })
-  );
-
-  socket.on('conn-init', ({ socketId }) =>
-    onInitializeConnection({ socketId }, { socket, io })
-  );
+  socket
+    .on('create-new-room', (params) => onCreateRoom(params, context))
+    .on('join-room', (params) => onJoinRoom(params, context))
+    .on('disconnect', () => onDisconnect(context))
+    .on('conn-signal', (params) => onConnSignal(params, context))
+    .on('conn-init', (params) => onInitializeConnection(params, context));
 };
