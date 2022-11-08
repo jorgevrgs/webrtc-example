@@ -16,6 +16,10 @@ export function viewLocalVideo(stream: MediaStream) {
   videoElement.autoplay = true;
   videoElement.srcObject = stream;
 
+  videoElement.onloadedmetadata = () => {
+    videoElement.play();
+  };
+
   localVideoContainer.appendChild(videoElement);
   videosPortal.appendChild(localVideoContainer);
 }
@@ -47,6 +51,10 @@ export function viewRemoteVideo(stream: MediaStream, socketId: string) {
   const videoElement = document.createElement('video');
   videoElement.autoplay = true;
   videoElement.srcObject = stream;
+
+  videoElement.onloadedmetadata = () => {
+    videoElement.play();
+  };
 
   remoteVideoContainer.appendChild(videoElement);
   videosPortal.appendChild(remoteVideoContainer);

@@ -2,14 +2,15 @@ let localStream: MediaStream;
 
 export const getLocalStream = async () => {
   if (!localStream) {
-    const defaultMediaStreamContraints = {
+    const contraints: MediaStreamConstraints = {
       audio: true,
-      video: true,
+      video: {
+        width: 480,
+        height: 360,
+      },
     };
 
-    localStream = await navigator.mediaDevices.getUserMedia(
-      defaultMediaStreamContraints
-    );
+    localStream = await navigator.mediaDevices.getUserMedia(contraints);
   }
 
   return localStream;
