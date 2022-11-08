@@ -1,20 +1,15 @@
+import type { UserDto } from './user.dto';
+
 export class RoomDto {
-  /** @type {string} */
-  id = '';
+  'id': string = '';
 
-  /** @type {Map<string, UserDto>} */
-  #_connectedUsers = new Map();
+  #_connectedUsers: Map<string, UserDto> = new Map();
 
-  constructor(data) {
+  constructor(data: Partial<RoomDto>) {
     Object.assign(this, data);
   }
 
-  /**
-   *
-   * @param {UserDto} user
-   * @returns
-   */
-  addUser(user) {
+  addUser(user: UserDto) {
     if (!this.#_connectedUsers.has(user.socketId)) {
       this.#_connectedUsers.set(user.socketId, user);
     }
@@ -26,7 +21,7 @@ export class RoomDto {
     return Array.from(this.#_connectedUsers.values());
   }
 
-  removeUserBySocketId(socketId) {
+  removeUserBySocketId(socketId: string) {
     this.#_connectedUsers.delete(socketId);
 
     return this;

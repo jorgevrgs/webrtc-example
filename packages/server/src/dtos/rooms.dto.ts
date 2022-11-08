@@ -1,24 +1,23 @@
 import { v4 as uuidv4 } from 'uuid';
-import { RoomDto } from './room.dto.mjs';
-import { UserDto } from './user.dto.mjs';
+import { RoomDto } from './room.dto';
+import { UserDto } from './user.dto';
 
 export class RoomsDto {
-  /** @type {Map<string, RoomDto>} */
-  rooms = new Map();
+  rooms: Map<string, RoomDto> = new Map();
 
-  constructor(data) {
+  constructor(data?: Partial<RoomsDto>) {
     Object.assign(this, data);
   }
 
-  getRoomById(id) {
+  getRoomById(id: string) {
     return this.rooms.get(id);
   }
 
-  hasRoom(id) {
+  hasRoom(id: string) {
     return this.rooms.has(id);
   }
 
-  joinRoom(roomId, identity, socketId) {
+  joinRoom(roomId: string, identity: string, socketId: string) {
     const userId = uuidv4();
 
     const user = new UserDto({
@@ -28,12 +27,12 @@ export class RoomsDto {
       roomId,
     });
 
-    this.rooms.get(roomId).addUser(user);
+    this.rooms.get(roomId)?.addUser(user);
 
     return user;
   }
 
-  createRoom(socketId, identity) {
+  createRoom(socketId: string, identity: string) {
     const userId = uuidv4();
     const roomId = uuidv4();
 
@@ -58,29 +57,19 @@ export class RoomsDto {
     };
   }
 
-  removeUserFromRoom(roomId, socketId) {
-    this.rooms.get(roomId).removeUserBySocketId(socketId);
+  removeUserFromRoom(roomId: string, socketId: string) {
+    this.rooms.get(roomId)?.removeUserBySocketId(socketId);
 
     return this;
   }
 
-  /**
-   *
-   * @param {string} id room id
-   * @returns {RoomsDto}
-   */
-  removeRoom(id) {
+  removeRoom(id: string) {
     this.rooms.delete(id);
 
     return this;
   }
 
-  /**
-   *
-   * @param {string} id room id
-   * @returns {UserDto[]}
-   */
-  getRoomUsers(id) {
-    return this.rooms.get(id).connectedUsers;
+  getUsersByRoomId(id: string) {
+    return this.rooms.get(id)?.connectedUsers;
   }
 }
