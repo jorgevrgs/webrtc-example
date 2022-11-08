@@ -9,10 +9,10 @@ export default function Participants() {
 
   return (
     <div className="participants_container">
-      {participants.map(({ identity }, index) => (
+      {participants.map(({ identity, id }, index) => (
         <Participant
           identity={identity}
-          key={index}
+          key={id}
           lastItem={participants.length === index + 1}
         />
       ))}

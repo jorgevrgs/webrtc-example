@@ -1,7 +1,5 @@
-// @ts-check
-
 import { socketEvent } from '@app/commons';
-import { Context } from '../types';
+import { ServerContext } from '../types';
 
 export const onCreateRoom = (
   {
@@ -9,9 +7,9 @@ export const onCreateRoom = (
   }: {
     identity: string;
   },
-  { rooms, socket, connectedUsers }: Context
+  { rooms, socket, connectedUsers }: ServerContext
 ) => {
-  console.log('create-new-room', identity);
+  console.log('create-new-room', { identity, socketId: socket.id });
 
   const { user, room } = rooms.createRoom(socket.id, identity);
 
@@ -19,8 +17,7 @@ export const onCreateRoom = (
 
   connectedUsers.addUser(user);
 
-  console.log('New room created', room.id);
-  console.log('Rooms', JSON.stringify(room, null, 2));
+  console.log('New room created', { roomId: room.id });
 
   socket.emit(socketEvent.roomCreated, { roomId: room.id });
   socket.emit(socketEvent.roomUpdated, {

@@ -7,10 +7,18 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Nodemon",
+      "name": "Server",
       "skipFiles": ["<node_internals>/**"],
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run-script", "server"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Client",
+      "skipFiles": ["<node_internals>/**"],
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "client"]
     }
   ]
 }

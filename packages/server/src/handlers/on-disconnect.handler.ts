@@ -1,12 +1,12 @@
 import { socketEvent } from '@app/commons';
-import { Context } from '../types';
+import { ServerContext } from '../types';
 
 export const onDisconnect = ({
   socket,
   connectedUsers,
   io,
   rooms,
-}: Context) => {
+}: ServerContext) => {
   console.log('disconnect', socket.id);
 
   const user = connectedUsers.getUserBySocketId(socket.id);

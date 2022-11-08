@@ -1,7 +1,5 @@
-// @ts-check
-
 import { socketEvent } from '@app/commons';
-import { Context } from '../types';
+import { ServerContext } from '../types';
 
 export const onConnSignal = (
   {
@@ -11,7 +9,7 @@ export const onConnSignal = (
     socketId: string;
     signal: any;
   },
-  { socket, io }: Context
+  { socket, io }: ServerContext
 ) => {
   const signalingData = {
     signal,

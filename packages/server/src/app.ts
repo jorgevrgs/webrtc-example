@@ -1,17 +1,14 @@
-// @ts-check
-
 import { socketEvent } from '@app/commons';
 import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 import {
+  onConnInit,
   onConnSignal,
   onCreateRoom,
   onDisconnect,
-  onInitializeConnection,
   onJoinRoom,
 } from './handlers';
-import { websocketPlugin } from './plugins';
-import { dataPlugin } from './plugins/data.plugin';
+import { corsPlugin, dataPlugin, websocketPlugin } from './plugins';
 import { roomsRoute } from './routes';
 // import twilio from 'twilio';
 
@@ -21,6 +18,7 @@ import { roomsRoute } from './routes';
 
 const app: FastifyPluginAsync = async (fastify, opts) => {
   fastify
+    .register(fp(corsPlugin))
     .register(fp(dataPlugin))
     .register(fp(websocketPlugin))
     .ready((err) => {
@@ -40,9 +38,7 @@ const app: FastifyPluginAsync = async (fastify, opts) => {
           .on(socketEvent.createRoom, (params) => onCreateRoom(params, context))
           .on(socketEvent.joinRoom, (params) => onJoinRoom(params, context))
           .on(socketEvent.connSignal, (params) => onConnSignal(params, context))
-          .on(socketEvent.connInit, (params) =>
-            onInitializeConnection(params, context)
-          )
+          .on(socketEvent.connInit, (params) => onConnInit(params, context))
           .on(socketEvent.disconnect, () => onDisconnect(context));
       });
     });

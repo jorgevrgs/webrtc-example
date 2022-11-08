@@ -1,17 +1,15 @@
-// @ts-check
-
 import { socketEvent } from '@app/commons';
-import { Context } from '../types';
+import { ServerContext } from '../types';
 
-export const onInitializeConnection = (
+export const onConnInit = (
   {
     socketId,
   }: {
     socketId: string;
   },
-  { socket, io }: Context
+  { socket, io }: ServerContext
 ) => {
-  console.log('onInitializeConnection', { socketId });
+  console.log('onConnInit', { socketId });
 
   const initData = { socketId: socket.id };
 

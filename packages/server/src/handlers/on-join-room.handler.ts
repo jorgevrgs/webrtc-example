@@ -1,7 +1,5 @@
-// @ts-check
-
 import { socketEvent } from '@app/commons';
-import { Context } from '../types';
+import { ServerContext } from '../types';
 
 export const onJoinRoom = (
   {
@@ -11,7 +9,7 @@ export const onJoinRoom = (
     roomId: string;
     identity: string;
   },
-  { rooms, socket, connectedUsers, io }: Context
+  { rooms, socket, connectedUsers, io }: ServerContext
 ) => {
   console.log('join-room', roomId, identity);
 
@@ -26,14 +24,24 @@ export const onJoinRoom = (
   const users = rooms.getUsersByRoomId(roomId);
 
   // Prepare peer connection
-  users &&
-    users
-      .filter((u) => u.socketId !== socket.id)
-      .forEach((u) => {
-        const data = { socketId: u.socketId };
+  if (!users) {
+    throw new Error("Can't find users in room");
+  }
 
-        io.to(roomId).emit(socketEvent.connPrepare, data);
-      });
+  console.log(
+    'Current users in room',
+    JSON.stringify({ roomId, users }, null, 2)
+  );
+
+  users
+    .filter((u) => u.socketId !== socket.id)
+    .forEach((u) => {
+      const data = { socketId: u.socketId };
+
+      console.log('Emitting connPrepare', data);
+
+      io.to(roomId).emit(socketEvent.connPrepare, data);
+    });
 
   io.to(roomId).emit(socketEvent.roomUpdated, {
     connectedUsers: users,

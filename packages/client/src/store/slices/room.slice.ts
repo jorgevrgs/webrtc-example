@@ -1,15 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface AppState {
+export interface Participant {
+  id: string;
+  identity: string;
+  socketId: string;
+  roomId: string;
+}
+
+export interface RoomState {
   connectOnlyWithAudio: boolean;
   identity: string;
   isRoomHost: boolean;
-  participants: { identity: string }[];
+  participants: Participant[];
   roomId: string | null;
   showOverlay: boolean;
 }
 
-const initState: AppState = {
+const initState: RoomState = {
   connectOnlyWithAudio: false,
   identity: '',
   isRoomHost: false,
@@ -42,7 +49,7 @@ export const roomSlice = createSlice({
       state.showOverlay = action.payload;
     },
 
-    setParticipants: (state, action: PayloadAction<{ identity: string }[]>) => {
+    setParticipants: (state, action: PayloadAction<Participant[]>) => {
       state.participants = action.payload;
     },
   },
