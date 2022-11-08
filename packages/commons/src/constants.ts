@@ -1,17 +1,17 @@
-export const SOCKET_EVENT = {
+export enum SOCKET_EVENT {
   // Peer
-  connInit: 'conn-init',
-  connPrepare: 'conn-prepare',
-  connSignal: 'conn-signal',
+  connInit = 'conn-init',
+  connPrepare = 'conn-prepare',
+  connSignal = 'conn-signal',
 
   // Client
-  connect: 'connect',
-  roomCreated: 'room-created',
-  roomUpdated: 'room-updated',
+  connect = 'connect',
+  roomCreated = 'room-created',
+  roomUpdated = 'room-updated',
 
   // Server
-  connection: 'connection',
-  createRoom: 'create-new-room',
-  disconnect: 'disconnect',
-  joinRoom: 'join-room',
-};
+  connection = 'connection',
+  createRoom = 'create-new-room',
+  disconnect = 'disconnect',
+  joinRoom = 'join-room',
+}
