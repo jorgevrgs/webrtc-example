@@ -56,6 +56,14 @@ export function viewRemoteVideo(stream: MediaStream, socketId: string) {
     videoElement.play();
   };
 
+  videoElement.addEventListener('click', () => {
+    if (videoElement.classList.contains('full_screen')) {
+      videoElement.classList.remove('full_screen');
+    } else {
+      videoElement.classList.add('full_screen');
+    }
+  });
+
   remoteVideoContainer.appendChild(videoElement);
   videosPortal.appendChild(remoteVideoContainer);
 }
