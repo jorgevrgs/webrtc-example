@@ -1,4 +1,4 @@
-import { socketEvent } from '@app/commons';
+import { SOCKET_EVENT } from '@app/commons';
 import type { Instance } from 'simple-peer';
 import io from 'socket.io-client';
 import {
@@ -24,13 +24,13 @@ const context: ClientContext = {
 };
 
 export const createNewRoom = (identity: string) => {
-  console.log(socketEvent.createRoom, { identity });
+  console.log(SOCKET_EVENT.createRoom, { identity });
 
   const data = {
     identity,
   };
 
-  socket.emit(socketEvent.createRoom, data);
+  socket.emit(SOCKET_EVENT.createRoom, data);
 };
 
 export const joinRoom = (identity: string, roomId: string) => {
@@ -41,15 +41,15 @@ export const joinRoom = (identity: string, roomId: string) => {
     identity,
   };
 
-  socket.emit(socketEvent.joinRoom, data);
+  socket.emit(SOCKET_EVENT.joinRoom, data);
 };
 
-socket.on(socketEvent.connect, () => {
+socket.on(SOCKET_EVENT.connect, () => {
   console.log('connected to server', socket.id);
   socket
-    .on(socketEvent.roomCreated, (data) => onRoomCreated(data))
-    .on(socketEvent.roomUpdated, (data) => onRoomUpdated(data))
-    .on(socketEvent.connPrepare, (data) => onConnectionPrepare(data, context))
-    .on(socketEvent.connSignal, (data) => onConnectionSignal(data, context))
-    .on(socketEvent.connInit, (data) => onConnectionInit(data, context));
+    .on(SOCKET_EVENT.roomCreated, (data) => onRoomCreated(data))
+    .on(SOCKET_EVENT.roomUpdated, (data) => onRoomUpdated(data))
+    .on(SOCKET_EVENT.connPrepare, (data) => onConnectionPrepare(data, context))
+    .on(SOCKET_EVENT.connSignal, (data) => onConnectionSignal(data, context))
+    .on(SOCKET_EVENT.connInit, (data) => onConnectionInit(data, context));
 });

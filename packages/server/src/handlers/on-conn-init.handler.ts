@@ -1,4 +1,4 @@
-import { socketEvent } from '@app/commons';
+import { SOCKET_EVENT } from '@app/commons';
 import { ServerContext } from '../types';
 
 export const onConnInit = (
@@ -13,5 +13,5 @@ export const onConnInit = (
 
   const initData = { socketId: socket.id };
 
-  io.to(socketId).emit(socketEvent.connInit, initData);
+  io.to(socketId).emit(SOCKET_EVENT.connInit, initData);
 };

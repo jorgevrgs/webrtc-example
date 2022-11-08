@@ -1,4 +1,4 @@
-import { socketEvent } from '@app/commons';
+import { SOCKET_EVENT } from '@app/commons';
 import { FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 import {
@@ -24,7 +24,7 @@ const app: FastifyPluginAsync = async (fastify, opts) => {
     .ready((err) => {
       if (err) throw err;
 
-      fastify.io.on('connection', (socket) => {
+      fastify.io.on(SOCKET_EVENT.connection, (socket) => {
         console.log('User connected', socket.id);
 
         const context = {
@@ -35,11 +35,19 @@ const app: FastifyPluginAsync = async (fastify, opts) => {
         };
 
         socket
-          .on(socketEvent.createRoom, (params) => onCreateRoom(params, context))
-          .on(socketEvent.joinRoom, (params) => onJoinRoom(params, context))
-          .on(socketEvent.connSignal, (params) => onConnSignal(params, context))
-          .on(socketEvent.connInit, (params) => onConnInit(params, context))
-          .on(socketEvent.disconnect, () => onDisconnect(context));
+          .on(SOCKET_EVENT.createRoom, (params: any) =>
+            onCreateRoom(params, context)
+          )
+          .on(SOCKET_EVENT.joinRoom, (params: any) =>
+            onJoinRoom(params, context)
+          )
+          .on(SOCKET_EVENT.connSignal, (params: any) =>
+            onConnSignal(params, context)
+          )
+          .on(SOCKET_EVENT.connInit, (params: any) =>
+            onConnInit(params, context)
+          )
+          .on(SOCKET_EVENT.disconnect, () => onDisconnect(context));
       });
     });
 

@@ -1,4 +1,4 @@
-import { socketEvent } from '@app/commons';
+import { SOCKET_EVENT } from '@app/commons';
 import SimplePeer, { Instance, SignalData } from 'simple-peer';
 import { Socket } from 'socket.io-client';
 import { viewRemoteVideo } from '../utils/elements';
@@ -43,12 +43,10 @@ const prepareNewPeerConnection = async (
       socketId,
     };
 
-    if (socket) socket.emit(socketEvent.connSignal, signalData);
+    if (socket) socket.emit(SOCKET_EVENT.connSignal, signalData);
   };
 
   const onStream = (stream: MediaStream, socketId: string) => {
-    console.log('onStream', { stream, socketId });
-
     if (socketId === socket?.id) {
       console.log('Ommiting stream from self', { socketId });
       return;
@@ -81,7 +79,7 @@ export const onConnectionPrepare = (
     { socket, streams, peers }
   );
 
-  if (socket) socket.emit(socketEvent.connInit, { socketId });
+  if (socket) socket.emit(SOCKET_EVENT.connInit, { socketId });
 };
 
 export const onConnectionSignal = (

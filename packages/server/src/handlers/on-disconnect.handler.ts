@@ -1,4 +1,4 @@
-import { socketEvent } from '@app/commons';
+import { SOCKET_EVENT } from '@app/commons';
 import { ServerContext } from '../types';
 
 export const onDisconnect = ({
@@ -26,7 +26,7 @@ export const onDisconnect = ({
     console.log('Updated users', JSON.stringify(users, null, 2));
 
     if (users && users.length > 0) {
-      io.to(roomId).emit(socketEvent.roomUpdated, {
+      io.to(roomId).emit(SOCKET_EVENT.roomUpdated, {
         connectedUsers: users,
       });
     } else {

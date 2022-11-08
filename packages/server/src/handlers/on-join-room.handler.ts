@@ -1,4 +1,4 @@
-import { socketEvent } from '@app/commons';
+import { SOCKET_EVENT } from '@app/commons';
 import { ServerContext } from '../types';
 
 export const onJoinRoom = (
@@ -40,10 +40,10 @@ export const onJoinRoom = (
 
       console.log('Emitting connPrepare', data);
 
-      io.to(roomId).emit(socketEvent.connPrepare, data);
+      io.to(roomId).emit(SOCKET_EVENT.connPrepare, data);
     });
 
-  io.to(roomId).emit(socketEvent.roomUpdated, {
+  io.to(roomId).emit(SOCKET_EVENT.roomUpdated, {
     connectedUsers: users,
   });
 };

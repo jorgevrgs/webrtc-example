@@ -1,4 +1,4 @@
-import { socketEvent } from '@app/commons';
+import { SOCKET_EVENT } from '@app/commons';
 import { ServerContext } from '../types';
 
 export const onCreateRoom = (
@@ -19,8 +19,8 @@ export const onCreateRoom = (
 
   console.log('New room created', { roomId: room.id });
 
-  socket.emit(socketEvent.roomCreated, { roomId: room.id });
-  socket.emit(socketEvent.roomUpdated, {
+  socket.emit(SOCKET_EVENT.roomCreated, { roomId: room.id });
+  socket.emit(SOCKET_EVENT.roomUpdated, {
     connectedUsers: [user],
   });
 };
