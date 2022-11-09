@@ -8,6 +8,7 @@ export enum SOCKET_EVENT {
   connect = 'connect',
   roomCreated = 'room-created',
   roomUpdated = 'room-updated',
+  userDisconnected = 'user-disconnected',
 
   // Server
   connection = 'connection',

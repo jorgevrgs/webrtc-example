@@ -8,6 +8,7 @@ import {
   onConnectionSignal,
   onRoomCreated,
   onRoomUpdated,
+  onUserDisconnected,
 } from '../handlers';
 
 const SERVER = 'http://localhost:1337';
@@ -51,5 +52,8 @@ socket.on(SOCKET_EVENT.connect, () => {
     .on(SOCKET_EVENT.roomUpdated, (data) => onRoomUpdated(data))
     .on(SOCKET_EVENT.connPrepare, (data) => onConnectionPrepare(data, context))
     .on(SOCKET_EVENT.connSignal, (data) => onConnectionSignal(data, context))
-    .on(SOCKET_EVENT.connInit, (data) => onConnectionInit(data, context));
+    .on(SOCKET_EVENT.connInit, (data) => onConnectionInit(data, context))
+    .on(SOCKET_EVENT.userDisconnected, (data) =>
+      onUserDisconnected(data, context)
+    );
 });

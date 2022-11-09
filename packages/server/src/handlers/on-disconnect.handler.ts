@@ -26,6 +26,10 @@ export const onDisconnect = ({
     console.log('Updated users', JSON.stringify(users, null, 2));
 
     if (users && users.length > 0) {
+      io.to(roomId).emit(SOCKET_EVENT.userDisconnected, {
+        socketId: socket.id,
+      });
+
       io.to(roomId).emit(SOCKET_EVENT.roomUpdated, {
         connectedUsers: users,
       });
