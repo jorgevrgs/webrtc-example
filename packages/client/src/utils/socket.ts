@@ -10,6 +10,7 @@ import {
   onRoomUpdated,
   onUserDisconnected,
 } from '../handlers';
+import { getLocalStream } from './media-stream';
 
 const SERVER = 'http://localhost:1337';
 
@@ -44,6 +45,49 @@ export const joinRoom = (identity: string, roomId: string) => {
 
   socket.emit(SOCKET_EVENT.joinRoom, data);
 };
+
+export async function toggleScreenShare(
+  isActive: boolean,
+  screen?: MediaStream
+) {
+  console.log('toggleScreenShare', { isActive });
+
+  if (isActive) {
+    console.log('Displaying local stream');
+
+    const localStream = await getLocalStream();
+    replaceStream(localStream);
+  } else if (screen) {
+    console.log('Displaying screen stream');
+
+    replaceStream(screen);
+  } else {
+    console.error('No screen stream found');
+  }
+}
+
+export function replaceStream(newStream: MediaStream) {
+  peers.forEach((peer, socketId) => {
+    peer.streams.forEach((stream) => {
+      stream.getTracks().forEach((oldTrack) => {
+        newStream.getTracks().forEach((newTrack) => {
+          if (oldTrack.kind === newTrack.kind) {
+            console.log('replacing track', {
+              current: oldTrack.kind,
+              new: newTrack.kind,
+              socketId,
+            });
+
+            if (!peer.destroyed) {
+              peer.replaceTrack(oldTrack, newTrack, stream);
+              return;
+            }
+          }
+        });
+      });
+    });
+  });
+}
 
 socket.on(SOCKET_EVENT.connect, () => {
   console.log('connected to server', socket.id);
