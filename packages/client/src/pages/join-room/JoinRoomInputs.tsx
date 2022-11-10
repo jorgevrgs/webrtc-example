@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, createRef, forwardRef, useEffect } from 'react';
 
 interface InputProps {
   placeholder: string;
@@ -6,16 +6,19 @@ interface InputProps {
   onChangeHandler: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input = ({ placeholder, value, onChangeHandler }: InputProps) => {
-  return (
-    <input
-      className="join_room_input"
-      placeholder={placeholder}
-      value={value}
-      onChange={onChangeHandler}
-    />
-  );
-};
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ placeholder, value, onChangeHandler }, ref) => {
+    return (
+      <input
+        className="join_room_input"
+        placeholder={placeholder}
+        value={value}
+        onChange={onChangeHandler}
+        ref={ref}
+      />
+    );
+  }
+);
 
 interface JoinRoomInputsProps {
   roomIdValue: string;
@@ -32,6 +35,9 @@ export default function JoinRoomInputs({
   setUserNameValue,
   isRoomHost,
 }: JoinRoomInputsProps) {
+  const nameRef = createRef<HTMLInputElement>();
+  const meetingRef = createRef<HTMLInputElement>();
+
   const handleRoomIdChange = (e: ChangeEvent<HTMLInputElement>) => {
     setRoomIdValue(e.target.value);
   };
@@ -40,6 +46,14 @@ export default function JoinRoomInputs({
     setUserNameValue(e.target.value);
   };
 
+  useEffect(() => {
+    if (isRoomHost) {
+      nameRef.current?.focus();
+    } else {
+      meetingRef.current?.focus();
+    }
+  }, []);
+
   return (
     <div className="join_room_inputs_container">
       {!isRoomHost && (
@@ -47,6 +61,7 @@ export default function JoinRoomInputs({
           placeholder="Enter meeting ID"
           value={roomIdValue}
           onChangeHandler={handleRoomIdChange}
+          ref={meetingRef}
         />
       )}
 
@@ -54,6 +69,7 @@ export default function JoinRoomInputs({
         placeholder="Enter your name"
         value={userNameValue}
         onChangeHandler={handleUserNameChange}
+        ref={nameRef}
       />
     </div>
   );
