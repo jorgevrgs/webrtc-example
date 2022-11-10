@@ -5,14 +5,23 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "server": "npm run dev -w @app/server",
-    "client": "npm run dev -w @app/client",
+    "dev": "pnpm -r --parallel --filter='./packages/*' run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "@app/server": "workspace:*",
+    "@app/client": "workspace:*",
+    "@app/commons": "workspace:*"
+  },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "devDependencies": {
+    "@types/node": "18.11.9",
+    "typescript": "4.8.4"
+  },
+  "packageManager": "pnpm@7.15.0"
 }
