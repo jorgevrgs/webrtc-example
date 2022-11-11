@@ -23,12 +23,16 @@ export default function RoomPage() {
     );
 
   useEffect(() => {
-    initRoomConnection({
-      roomId,
-      identity,
-      isRoomHost,
-      onlyAudio: connectOnlyWithAudio,
-    });
+    if (!isRoomHost && !roomId) {
+      window.location.href = window.location.origin;
+    } else {
+      initRoomConnection({
+        roomId,
+        identity,
+        isRoomHost,
+        onlyAudio: connectOnlyWithAudio,
+      });
+    }
   }, []);
 
   return (
