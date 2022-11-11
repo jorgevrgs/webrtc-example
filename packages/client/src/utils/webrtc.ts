@@ -2,6 +2,7 @@ import { setShowOverlay, store } from '../store';
 import { viewLocalVideo } from './elements';
 import { getLocalStream } from './media-stream';
 import { createNewRoom, joinRoom } from './socket';
+import { fetchTurnCredentials } from './turn';
 
 let localStream: MediaStream;
 
@@ -17,6 +18,7 @@ export async function initRoomConnection({
   onlyAudio: boolean;
 }) {
   console.log('initRoomConnection', { roomId, identity, isRoomHost });
+  await fetchTurnCredentials();
 
   localStream = await getLocalStream();
   viewLocalVideo(localStream, onlyAudio);

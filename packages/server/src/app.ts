@@ -8,18 +8,19 @@ import {
   onDisconnect,
   onJoinRoom,
 } from './handlers';
-import { corsPlugin, dataPlugin, websocketPlugin } from './plugins';
-import { roomsRoute } from './routes';
-// import twilio from 'twilio';
-
-// const accountSid = process.env.TWILIO_ACCOUNT_SID;
-// const authToken = process.env.TWILIO_AUTH_TOKEN;
-// const client = twilio(accountSid, authToken);
+import {
+  corsPlugin,
+  dataPlugin,
+  twilioPlugin,
+  websocketPlugin,
+} from './plugins';
+import { credentialsRoute, roomsRoute } from './routes';
 
 const app: FastifyPluginAsync = async (fastify, opts) => {
   fastify
     .register(fp(corsPlugin))
     .register(fp(dataPlugin))
+    .register(fp(twilioPlugin))
     .register(fp(websocketPlugin))
     .ready((err) => {
       if (err) throw err;
@@ -51,7 +52,7 @@ const app: FastifyPluginAsync = async (fastify, opts) => {
       });
     });
 
-  fastify.register(roomsRoute);
+  fastify.register(roomsRoute).register(credentialsRoute);
 };
 
 export default app;

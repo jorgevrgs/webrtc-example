@@ -4,6 +4,7 @@ import { Socket } from 'socket.io-client';
 import { addMessage, store } from '../store';
 import { viewRemoteVideo } from '../utils/elements';
 import { getLocalStream } from '../utils/media-stream';
+import { getTurnIceServers } from '../utils/turn';
 
 export const CHANNEL_NAME = 'messenger';
 
@@ -11,6 +12,26 @@ export interface ClientContext {
   socket: Socket;
   streams: Map<string, MediaStream>;
   peers: Map<string, Instance>;
+}
+
+function getRTCConfig(): RTCConfiguration {
+  const turnIceServers = getTurnIceServers();
+
+  const iceServers: RTCConfiguration['iceServers'] = [
+    {
+      urls: 'stun:stun.l.google.com:19302',
+    },
+  ];
+
+  if (turnIceServers) {
+    iceServers.push(...turnIceServers);
+  }
+
+  console.log('TURN ice servers', iceServers);
+
+  return {
+    iceServers,
+  };
 }
 
 const prepareNewPeerConnection = async (
@@ -25,18 +46,9 @@ const prepareNewPeerConnection = async (
 ) => {
   const localStream = await getLocalStream();
 
-  // Peer Config
-  const config = {
-    iceServers: [
-      {
-        urls: 'stun:stun.l.google.com:19302',
-      },
-    ],
-  };
-
   const peer = new SimplePeer({
     initiator: isInitiator,
-    config,
+    config: getRTCConfig(),
     stream: localStream,
     channelName: CHANNEL_NAME,
   });

@@ -5,22 +5,23 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "dev": "pnpm -r --parallel --filter='./packages/*' run dev",
+    "dev": "dotenv -e .env.local -- pnpm -r --parallel --filter='./packages/*' run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@app/server": "workspace:*",
     "@app/client": "workspace:*",
-    "@app/commons": "workspace:*"
+    "@app/commons": "workspace:*",
+    "@app/server": "workspace:*"
   },
   "workspaces": [
     "packages/*"
   ],
   "devDependencies": {
     "@types/node": "18.11.9",
+    "dotenv-cli": "6.0.0",
     "typescript": "4.8.4"
   },
   "packageManager": "pnpm@7.15.0"
