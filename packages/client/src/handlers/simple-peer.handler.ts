@@ -53,8 +53,12 @@ const prepareNewPeerConnection = async (
   const onStream = (stream: MediaStream, socketId: string) => {
     streams.set(socketId, stream);
 
+    const { participants } = store.getState().room;
+
+    const participant = participants.find((p) => p.socketId === socketId);
+
     // view remote streams
-    viewRemoteVideo(stream, socketId);
+    viewRemoteVideo(stream, socketId, Boolean(participant?.onlyAudio));
   };
 
   const onData = (chunk: any) => {

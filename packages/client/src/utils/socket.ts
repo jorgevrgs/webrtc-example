@@ -46,22 +46,28 @@ export const sendChatMessage = (content: string) => {
   });
 };
 
-export const createNewRoom = (identity: string) => {
+export const createNewRoom = (identity: string, onlyAudio: boolean) => {
   console.log(SOCKET_EVENT.createRoom, { identity });
 
   const data = {
     identity,
+    onlyAudio,
   };
 
   socket.emit(SOCKET_EVENT.createRoom, data);
 };
 
-export const joinRoom = (identity: string, roomId: string) => {
+export const joinRoom = (
+  identity: string,
+  roomId: string,
+  onlyAudio: boolean
+) => {
   console.log('joinRoom', { identity, roomId });
 
   const data = {
     roomId,
     identity,
+    onlyAudio,
   };
 
   socket.emit(SOCKET_EVENT.joinRoom, data);

@@ -4,14 +4,20 @@ import { ServerContext } from '../types';
 export const onCreateRoom = (
   {
     identity,
+    onlyAudio,
   }: {
     identity: string;
+    onlyAudio: boolean;
   },
   { rooms, socket, connectedUsers }: ServerContext
 ) => {
-  console.log('create-new-room', { identity, socketId: socket.id });
+  console.log('create-new-room', { identity, socketId: socket.id, onlyAudio });
 
-  const { user, room } = rooms.createRoom(socket.id, identity);
+  const { user, room } = rooms.createRoom({
+    socketId: socket.id,
+    identity,
+    onlyAudio,
+  });
 
   socket.join(room.id);
 

@@ -11,16 +11,23 @@ import { initRoomConnection } from '../../utils/webrtc';
 import './RoomPage.css';
 
 export default function RoomPage() {
-  const { roomId, identity, isRoomHost, showOverlay } = useAppSelector(
-    (state) =>
-      pick(state.room, ['roomId', 'identity', 'isRoomHost', 'showOverlay'])
-  );
+  const { roomId, identity, isRoomHost, showOverlay, connectOnlyWithAudio } =
+    useAppSelector((state) =>
+      pick(state.room, [
+        'roomId',
+        'identity',
+        'isRoomHost',
+        'showOverlay',
+        'connectOnlyWithAudio',
+      ])
+    );
 
   useEffect(() => {
     initRoomConnection({
       roomId,
       identity,
       isRoomHost,
+      onlyAudio: connectOnlyWithAudio,
     });
   }, []);
 

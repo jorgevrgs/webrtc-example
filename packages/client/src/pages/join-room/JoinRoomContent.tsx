@@ -21,6 +21,10 @@ export default function JoinRoomContent() {
     pick(state.room, ['isRoomHost', 'connectOnlyWithAudio'])
   );
 
+  const handleConnectOnlyWithAudioChange = (isChecked: boolean) => {
+    dispatch(setConnectOnlyWithAudio(isChecked));
+  };
+
   const handleJoinRoom = async () => {
     dispatch(setIdentity(userNameValue));
 
@@ -66,7 +70,7 @@ export default function JoinRoomContent() {
 
       <OnlyWithAudioCheckbox
         isChecked={connectOnlyWithAudio}
-        onChange={setConnectOnlyWithAudio}
+        onChange={handleConnectOnlyWithAudioChange}
       />
 
       <ErrorMessage errorMessage={errorMessage} />

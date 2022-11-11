@@ -5,15 +5,22 @@ export const onJoinRoom = (
   {
     roomId,
     identity,
+    onlyAudio,
   }: {
     roomId: string;
     identity: string;
+    onlyAudio: boolean;
   },
   { rooms, socket, connectedUsers, io }: ServerContext
 ) => {
-  console.log('join-room', roomId, identity);
+  console.log('join-room', { roomId, identity, onlyAudio });
 
-  const user = rooms.joinRoom(roomId, identity, socket.id);
+  const user = rooms.joinRoom({
+    roomId,
+    identity,
+    socketId: socket.id,
+    onlyAudio,
+  });
 
   socket.join(roomId);
 

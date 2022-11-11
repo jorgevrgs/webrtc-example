@@ -1,4 +1,4 @@
-export function viewLocalVideo(stream: MediaStream) {
+export function viewLocalVideo(stream: MediaStream, onlyAudio: boolean) {
   const videosPortal = document.getElementById('videos_portal');
 
   if (!videosPortal) {
@@ -21,10 +21,19 @@ export function viewLocalVideo(stream: MediaStream) {
   };
 
   localVideoContainer.appendChild(videoElement);
+
+  if (onlyAudio) {
+    localVideoContainer.appendChild(getOnlyAudioLabelElement());
+  }
+
   videosPortal.appendChild(localVideoContainer);
 }
 
-export function viewRemoteVideo(stream: MediaStream, socketId: string) {
+export function viewRemoteVideo(
+  stream: MediaStream,
+  socketId: string,
+  onlyAudio: boolean
+) {
   const videosPortal = document.getElementById('videos_portal');
 
   if (!videosPortal) {
@@ -65,5 +74,23 @@ export function viewRemoteVideo(stream: MediaStream, socketId: string) {
   });
 
   remoteVideoContainer.appendChild(videoElement);
+
+  if (onlyAudio) {
+    remoteVideoContainer.appendChild(getOnlyAudioLabelElement());
+  }
+
   videosPortal.appendChild(remoteVideoContainer);
+}
+
+function getOnlyAudioLabelElement() {
+  const labelContainer = document.createElement('div');
+  labelContainer.classList.add('label_only_audio_container');
+
+  const labelElement = document.createElement('p');
+  labelElement.classList.add('label_only_audio_text');
+  labelElement.innerText = 'Only audio';
+
+  labelContainer.appendChild(labelElement);
+
+  return labelContainer;
 }

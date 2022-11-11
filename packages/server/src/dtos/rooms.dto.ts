@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { RoomDto } from './room.dto';
 import { UserDto } from './user.dto';
 
@@ -17,34 +16,19 @@ export class RoomsDto {
     return this.rooms.has(id);
   }
 
-  joinRoom(roomId: string, identity: string, socketId: string) {
-    const userId = uuidv4();
+  joinRoom(params: Partial<UserDto>) {
+    const user = new UserDto(params);
 
-    const user = new UserDto({
-      id: userId,
-      identity,
-      socketId,
-      roomId,
-    });
-
-    this.rooms.get(roomId)?.addUser(user);
+    this.rooms.get(user.roomId)?.addUser(user);
 
     return user;
   }
 
-  createRoom(socketId: string, identity: string) {
-    const userId = uuidv4();
-    const roomId = uuidv4();
-
-    const user = new UserDto({
-      id: userId,
-      identity,
-      socketId,
-      roomId,
-    });
+  createRoom(params: Partial<UserDto>) {
+    const user = new UserDto(params);
 
     const room = new RoomDto({
-      id: roomId,
+      id: user.roomId,
     });
 
     room.addUser(user);

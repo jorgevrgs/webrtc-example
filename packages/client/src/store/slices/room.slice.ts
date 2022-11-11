@@ -11,6 +11,7 @@ export interface Participant {
   identity: string;
   socketId: string;
   roomId: string;
+  onlyAudio: boolean;
 }
 
 export interface RoomState {
