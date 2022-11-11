@@ -94,22 +94,17 @@ export async function toggleScreenShare(
 }
 
 export function replaceStream(newStream: MediaStream) {
-  const peer = peers.get(socket.id);
-
-  if (!peer) {
-    console.error('No peer found', socket.id);
-    return;
-  }
-
-  peer.streams.forEach((stream) => {
-    stream.getTracks().forEach((oldTrack) => {
-      newStream.getTracks().forEach((newTrack) => {
-        if (oldTrack.kind === newTrack.kind) {
-          if (!peer.destroyed) {
-            peer.replaceTrack(oldTrack, newTrack, stream);
-            return;
+  peers.forEach((peer) => {
+    peer.streams.forEach((stream) => {
+      stream.getTracks().forEach((oldTrack) => {
+        newStream.getTracks().forEach((newTrack) => {
+          if (oldTrack.kind === newTrack.kind) {
+            if (!peer.destroyed) {
+              peer.replaceTrack(oldTrack, newTrack, stream);
+              return;
+            }
           }
-        }
+        });
       });
     });
   });
