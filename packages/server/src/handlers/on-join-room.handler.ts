@@ -34,13 +34,13 @@ export const onJoinRoom = (
   );
 
   users
-    .filter((u) => u.socketId !== socket.id)
-    .forEach((u) => {
-      const data = { socketId: u.socketId };
+    .filter((user) => user.socketId !== socket.id)
+    .forEach((user) => {
+      const data = { socketId: user.socketId };
 
       console.log('Emitting connPrepare', data);
 
-      io.to(roomId).emit(SOCKET_EVENT.connPrepare, data);
+      io.to(user.socketId).emit(SOCKET_EVENT.connPrepare, data);
     });
 
   io.to(roomId).emit(SOCKET_EVENT.roomUpdated, {
