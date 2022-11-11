@@ -77,6 +77,8 @@ export function viewRemoteVideo(
 
   if (onlyAudio) {
     remoteVideoContainer.appendChild(getOnlyAudioLabelElement());
+  } else {
+    remoteVideoContainer.style.position = 'static';
   }
 
   videosPortal.appendChild(remoteVideoContainer);
