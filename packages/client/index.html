@@ -13,7 +13,22 @@
   <div id="videos_portal"></div>
   <script>
     if (global === undefined) {
+      console.log('global is undefined');
       var global = window;
+    }
+
+    if (process === undefined) {
+      console.log('process is undefined');
+      var process = {
+        env: {}
+      };
+    }
+
+    if (process.nextTick === undefined) {
+      console.log('nextTick is undefined');
+      process.nextTick = function (cb, ...args) {
+        typeof setImmediate === 'function' ? setImmediate(cb, ...args) : setTimeout(cb, 0, ...args);
+      };
     }
   </script>
   <script type="module" src="/src/main.tsx"></script>

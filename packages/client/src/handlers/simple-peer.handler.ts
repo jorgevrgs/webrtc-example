@@ -1,8 +1,11 @@
 import { SOCKET_EVENT } from '@app/commons';
 import SimplePeer, { Instance, SignalData } from 'simple-peer';
 import { Socket } from 'socket.io-client';
+import { addMessage, store } from '../store';
 import { viewRemoteVideo } from '../utils/elements';
 import { getLocalStream } from '../utils/media-stream';
+
+export const CHANNEL_NAME = 'messenger';
 
 export interface ClientContext {
   socket: Socket;
@@ -35,6 +38,7 @@ const prepareNewPeerConnection = async (
     initiator: isInitiator,
     config,
     stream: localStream,
+    channelName: CHANNEL_NAME,
   });
 
   const onSignal = (signal: SignalData, socketId: string) => {
@@ -47,18 +51,21 @@ const prepareNewPeerConnection = async (
   };
 
   const onStream = (stream: MediaStream, socketId: string) => {
-    if (socketId === socket?.id) {
-      console.log('Ommiting stream from self', { socketId });
-      return;
-    }
-
     streams.set(socketId, stream);
 
     // view remote streams
     viewRemoteVideo(stream, socketId);
   };
 
+  const onData = (chunk: any) => {
+    const messageData = JSON.parse(chunk.toString());
+
+    // Append new message to chat
+    store.dispatch(addMessage(messageData));
+  };
+
   peer
+    .on('data', onData)
     .on('signal', (signal) => onSignal(signal, socketId))
     .on('stream', (stream) => onStream(stream, socketId))
     .on('error', (error) => {

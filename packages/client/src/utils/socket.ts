@@ -1,4 +1,5 @@
 import { SOCKET_EVENT } from '@app/commons';
+import { omit } from 'lodash-es';
 import type { Instance } from 'simple-peer';
 import io from 'socket.io-client';
 import {
@@ -10,6 +11,7 @@ import {
   onRoomUpdated,
   onUserDisconnected,
 } from '../handlers';
+import { addMessage, store } from '../store';
 import { getLocalStream } from './media-stream';
 
 const SERVER = 'http://localhost:1337';
@@ -23,6 +25,25 @@ const context: ClientContext = {
   socket,
   peers,
   streams,
+};
+
+export const sendChatMessage = (content: string) => {
+  // Append message to the store
+  const identity = store.getState().room.identity;
+  const messageData = {
+    identity,
+    content,
+    createdByMe: true,
+  };
+
+  store.dispatch(addMessage(messageData));
+
+  // Send message to all peers
+  peers.forEach((peer) => {
+    if (!peer.destroyed && peer.connected) {
+      peer.send(JSON.stringify(omit(messageData, 'createdByMe')));
+    }
+  });
 };
 
 export const createNewRoom = (identity: string) => {
@@ -67,23 +88,22 @@ export async function toggleScreenShare(
 }
 
 export function replaceStream(newStream: MediaStream) {
-  peers.forEach((peer, socketId) => {
-    peer.streams.forEach((stream) => {
-      stream.getTracks().forEach((oldTrack) => {
-        newStream.getTracks().forEach((newTrack) => {
-          if (oldTrack.kind === newTrack.kind) {
-            console.log('replacing track', {
-              current: oldTrack.kind,
-              new: newTrack.kind,
-              socketId,
-            });
+  const peer = peers.get(socket.id);
 
-            if (!peer.destroyed) {
-              peer.replaceTrack(oldTrack, newTrack, stream);
-              return;
-            }
+  if (!peer) {
+    console.error('No peer found', socket.id);
+    return;
+  }
+
+  peer.streams.forEach((stream) => {
+    stream.getTracks().forEach((oldTrack) => {
+      newStream.getTracks().forEach((newTrack) => {
+        if (oldTrack.kind === newTrack.kind) {
+          if (!peer.destroyed) {
+            peer.replaceTrack(oldTrack, newTrack, stream);
+            return;
           }
-        });
+        }
       });
     });
   });

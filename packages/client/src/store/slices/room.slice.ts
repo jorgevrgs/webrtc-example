@@ -1,5 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+export interface Message {
+  identity: string;
+  content: string;
+  createdByMe: boolean;
+}
+
 export interface Participant {
   id: string;
   identity: string;
@@ -8,6 +14,7 @@ export interface Participant {
 }
 
 export interface RoomState {
+  messages: Message[];
   connectOnlyWithAudio: boolean;
   identity: string;
   isRoomHost: boolean;
@@ -17,6 +24,7 @@ export interface RoomState {
 }
 
 const initState: RoomState = {
+  messages: [],
   connectOnlyWithAudio: false,
   identity: '',
   isRoomHost: false,
@@ -52,16 +60,21 @@ export const roomSlice = createSlice({
     setParticipants: (state, action: PayloadAction<Participant[]>) => {
       state.participants = action.payload;
     },
+
+    addMessage: (state, action: PayloadAction<Message>) => {
+      state.messages = [...state.messages, action.payload];
+    },
   },
 });
 
 export const {
-  setIsRoomHost,
+  addMessage,
   setConnectOnlyWithAudio,
   setIdentity,
+  setIsRoomHost,
+  setParticipants,
   setRoomId,
   setShowOverlay,
-  setParticipants,
 } = roomSlice.actions;
 
 export const roomReducer = roomSlice.reducer;
