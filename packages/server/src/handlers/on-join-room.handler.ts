@@ -36,7 +36,7 @@ export const onJoinRoom = (
   users
     .filter((user) => user.socketId !== socket.id)
     .forEach((user) => {
-      const data = { socketId: user.socketId };
+      const data = { socketId: socket.id };
 
       console.log('Emitting connPrepare', data);
 
