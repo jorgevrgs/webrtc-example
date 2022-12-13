@@ -11,7 +11,7 @@ import {
   onRoomUpdated,
   onUserDisconnected,
 } from '../handlers';
-import { addMessage, store } from '../store';
+import { addMessage, setChatSocketId, store } from '../store';
 import { getLocalStream } from './media-stream';
 
 const SERVER = 'http://localhost:1337';
@@ -112,6 +112,9 @@ export function replaceStream(newStream: MediaStream) {
 
 socket.on(SOCKET_EVENT.connect, () => {
   console.log('connected to server', socket.id);
+
+  store.dispatch(setChatSocketId(socket.id));
+
   socket
     .on(SOCKET_EVENT.roomCreated, (data) => onRoomCreated(data))
     .on(SOCKET_EVENT.roomUpdated, (data) => onRoomUpdated(data))

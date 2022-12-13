@@ -1,3 +1,4 @@
+import DirectChat from './direct-chat/DirectChat';
 import Participants from './Participants';
 import ParticipantsLabel from './ParticipantsLabel';
 
@@ -7,6 +8,8 @@ export default function ParticipantsSection() {
       <ParticipantsLabel />
 
       <Participants />
+
+      <DirectChat />
     </div>
   );
 }
